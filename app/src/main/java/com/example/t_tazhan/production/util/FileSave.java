@@ -7,27 +7,21 @@ import java.io.FileOutputStream;
 
 public class FileSave {
 
-    private static final String ROOM_POSITION = "/ROOM_POSITION";
-    public static void saveFile(String str,String X,String Y) {
+    private static final String webResponseData = "/Web_Response_Data";
+    public static void saveFile(String str) {
         String filePath;
         boolean hasSDCard = Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
         if (hasSDCard) {
             filePath = Environment.getExternalStorageDirectory().toString()
-                    + ROOM_POSITION
+                    + webResponseData
                     + File.separator
-                    + "信标位置"
-                    + X
-                    + ","
-                    + Y
+                    + "Web返回的数据"
                     + "_test.txt";
         } else  // 系统下载缓存根目录的hello.text
             filePath = Environment.getDownloadCacheDirectory().toString()
-                    + ROOM_POSITION
+                    + webResponseData
                     + File.separator
-                    + "信标位置"
-                    + X
-                    + ","
-                    + Y
+                    + "Web返回的数据"
                     + "_test.txt";
 
         try {

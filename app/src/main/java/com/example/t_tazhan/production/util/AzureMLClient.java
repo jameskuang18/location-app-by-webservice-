@@ -106,9 +106,9 @@ public class AzureMLClient {
                   "      ],\n" +
                   "      \"Values\": [\n" +
                   "        [\n" +
-                  "          \""+A+"\""+",\n" +
-                  "          \""+B+"\""+",\n" +
-                  "          \""+C+"\""+",\n" +
+                  "          \""+-68+"\""+",\n" +
+                  "          \""+-78+"\""+",\n" +
+                  "          \""+-60+"\""+",\n" +
                   "          \""+D+"\""+",\n" +
                   "          \""+E+"\""+",\n" +
                   "          \""+F+"\""+",\n" +
@@ -116,9 +116,9 @@ public class AzureMLClient {
                   "          \""+H+"\""+"\n" +
                   "        ],\n" +
                   "        [\n" +
-                  "          \""+A+"\""+",\n" +
-                  "          \""+B+"\""+",\n" +
-                  "          \""+C+"\""+",\n" +
+                  "          \""+-68+"\""+",\n" +
+                  "          \""+-78+"\""+",\n" +
+                  "          \""+-60+"\""+",\n" +
                   "          \""+D+"\""+",\n" +
                   "          \""+E+"\""+",\n" +
                   "          \""+F+"\""+",\n" +
@@ -179,20 +179,22 @@ public class AzureMLClient {
                   return responseString.toString();
               }
       }
+    public static String s1= new String();
     public static JSONObject jsonObject;
     public static List<Integer> temp;
-    public static List<Integer> getPoint(String s){
+    public static String getPoint(String s){
         try {
             jsonObject = new JSONObject(s);
             JSONObject jsonObject1 = jsonObject.getJSONObject("Results").getJSONObject("output1").getJSONObject("value");
-            String s1 = jsonObject1.getJSONArray("Values").getJSONArray(0).toString();
+            s1 = jsonObject1.getJSONArray("Values").getJSONArray(0).toString();
+            System.out.println("提取结果： "+s1+"\r");//get the result value
             input = Integer.parseInt(String.valueOf(s1.charAt(2)));
             System.out.println("API Request"+input);
             temp = getData(input);
         } catch (JSONException e) {
             e.printStackTrace();
         } finally {
-            return temp;
+            return s1;
         }
     }
     public static int a = 1;

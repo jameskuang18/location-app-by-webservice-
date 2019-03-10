@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+
     <LinearLayout
         android:id="@+id/bluescreen"
         android:layout_width="fill_parent"
@@ -29,8 +30,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:onClick="onClick_Search"
             android:text="单击按钮开始搜索"
+            android:onClick="onClick_Search"
             android:textColor="#ff1919c0" />
         <LinearLayout
             android:layout_width="wrap_content"
@@ -86,8 +87,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:onClick="onClick_End"
             android:text="单击按钮结束搜索"
+            android:onClick="onClick_End"
             android:textColor="#ff1919c0" />
 
         <LinearLayout
@@ -158,6 +159,34 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="#ff0b18c0" />
         </LinearLayout>
-    </LinearLayout>
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
+            <Button
+                android:id="@+id/save_file"
+                android:layout_width="383dp"
+                android:layout_height="wrap_content"
+                android:onClick="onClick_Dump"
+                android:text="保存数据" />
+        </LinearLayout>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">\
+             <TextView
+              android:id="@+id/show_result"
+              android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginTop="30dp"
+                android:lineSpacingMultiplier="1.5"
+                android:textColor="#ff000000"
+             android:textSize="15sp" />
+    </ScrollView>
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>

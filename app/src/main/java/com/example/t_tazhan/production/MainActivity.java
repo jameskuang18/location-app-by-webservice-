@@ -24,7 +24,7 @@ import android.widget.Toast;
 
 import com.example.t_tazhan.production.Image.ImageBrowseActivity;
 import com.example.t_tazhan.production.util.AzureMLClient;
-
+import com.example.t_tazhan.production.util.FileSave;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -33,7 +33,7 @@ import java.util.TreeMap;
 
 import static com.example.t_tazhan.production.Image.ImageBrowseActivity.initData;
 import static com.example.t_tazhan.production.Image.ImgBrowsePagerAdapter.height;
-import static com.example.t_tazhan.production.Image.ImgBrowsePagerAdapter.layoutContent;
+//import static com.example.t_tazhan.production.Image.ImgBrowsePagerAdapter.layoutContent;
 import static com.example.t_tazhan.production.Image.ImgBrowsePagerAdapter.width;
 import static com.example.t_tazhan.production.util.AzureMLClient.getPoint;
 import static com.example.t_tazhan.production.util.AzureMLClient.requestResponse;
@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     StringBuilder sb1 = new StringBuilder();
     String X = null,Y = null;
     String timerDuration = "8";
+    private static TextView showView;//把数据display
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public  void onReceive(Context context, Intent intent) {
@@ -120,8 +121,6 @@ public class MainActivity extends AppCompatActivity {
         textY.addTextChangedListener(textWatcher2);
         textTimer = findViewById(R.id.inputTimer);
         textTimer.addTextChangedListener(textWatcher3);
-        buttonStart = findViewById(R.id.button);
-        buttonEnd = findViewById(R.id.buttonEnd);
         textView = findViewById(R.id.countTimer);
         textView.setText(String.valueOf(0));
         IntentFilter intent = new IntentFilter();
@@ -130,6 +129,28 @@ public class MainActivity extends AppCompatActivity {
         intent.addAction(BluetoothAdapter.ACTION_SCAN_MODE_CHANGED);
         intent.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(mReceiver, intent);
+        showView=findViewById(R.id.show_result);
+    }
+    public void onClick_Search(View v) {
+        storageValue();
+        startActivity(new Intent(this, ImageBrowseActivity.class));
+        countTime = 0;
+        startTimer();
+        startTimer1();
+    }
+    public void onClick_End(View vie) {
+        endFlag = true;
+        sb1.append("此时信标位置为" + "[" + X + " "+ Y + "]").append("\r");
+        if (bluetoothAdapter.isDiscovering()) {
+            bluetoothAdapter.cancelDiscovery();
+        }
+        textX.getText().clear();
+        textY.getText().clear();
+        textTimer.getText().clear();
+        textView.setText(String.valueOf(0));
+    }
+    public void onClick_Dump(View view){
+        FileSave.saveFile(resultValue);
     }
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
@@ -148,24 +169,7 @@ public class MainActivity extends AppCompatActivity {
         unregisterReceiver(mReceiver);
     }
     boolean endFlag = false;
-    public void onClick_Search(View v) {
-        storageValue();
-        startActivity(new Intent(this, ImageBrowseActivity.class));
-        countTime = 0;
-        startTimer();
-        startTimer1();
-    }
-    public void onClick_End(View view) {
-        endFlag = true;
-        sb1.append("此时信标位置为" + "[" + X + " "+ Y + "]").append("\r");
-        if (bluetoothAdapter.isDiscovering()) {
-            bluetoothAdapter.cancelDiscovery();
-        }
-        textX.getText().clear();
-        textY.getText().clear();
-        textTimer.getText().clear();
-        textView.setText(String.valueOf(0));
-    }
+
     private TextWatcher textWatcher1 = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -249,10 +253,6 @@ public class MainActivity extends AppCompatActivity {
                     map.put(lst_Devices.get(j).split(" ")[0],lst_Devices.get(j).split(" ")[1]);
                 }
                 //debug for working？
-                for(int i=0;i<lst_Devices.size();++i)
-                {
-
-                }
                 ifConclude(map);
                 lst_Devices.clear();
             }
@@ -284,17 +284,17 @@ public class MainActivity extends AppCompatActivity {
                 layoutContent.addPoints(width,height);
             }
         });
-    }
+    }atic String resultValue=new String();
     public static int locationX = 11;//定位的坐标点x
     public static int locationY = 6;//定位的坐标点y
     public static void getAPIRequest(TreeMap<String,String> map) {
         try {
             String temp1 = transferBeacon(map);
             String temp2 = requestResponse(temp1);
-            System.out.println("request JSON is: "+temp2);
-            List<Integer> temp3 = getPoint(temp2);
-            locationX = temp3.get(0);
-            locationY = temp3.get(1);
+            String resultString = getPoint(temp2)+"\r";//单次取出Web返回的数据resultString
+            resultValue+=resultString;//拼接整段数据
+            System.out.println("保存的数据"+resultString+"\r");
+            showView.setText(resultString);
         } catch (Exception e) {
             e.printStackTrace();
         }
